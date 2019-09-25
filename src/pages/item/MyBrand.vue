@@ -103,11 +103,7 @@
         }
       },
       created(){
-        this.verify().then(() => {
-          this.getDataFromServer();
-        }).catch(() => {
-          this.$router.push("/login");
-        });
+        
       },
       methods:{
         getDataFromServer(){

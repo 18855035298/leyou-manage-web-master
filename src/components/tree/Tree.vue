@@ -41,16 +41,14 @@
       TreeItem
     },
     created() {
+
+      this.getData();
       if(this.treeData && this.treeData.length > 0){
         this.db = this.treeData;
         return;
       }
 
-      this.verify().then(() => {
-        this.getData();
-      }).catch(() => {
-        this.$router.push("/login");
-      });
+      
     },
     methods: {
       getData() {

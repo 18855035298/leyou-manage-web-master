@@ -18,9 +18,9 @@ Vue.prototype.$qs = qs;
 
 Vue.config.productionTip = false;
 
-Vue.prototype.verify = function () {
-  // return this.$http.get("/auth/verify")
-};
+// Vue.prototype.verify = function () {
+//   return this.$http.get("/auth/verify")
+// };
 
 /* eslint-disable no-new */
 new Vue({

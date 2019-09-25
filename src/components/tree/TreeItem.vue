@@ -14,7 +14,7 @@
                @blur="afterEdit" @keydown.enter="afterEdit"/>
       </v-list-tile-content>
       <v-list-tile-action v-if="isEdit">
-        <v-btn  icon @mouseover="c1='primary'" @mouseout="c1=''" :color="c1" @click.stop="addChild">
+        <v-btn icon @mouseover="c1='primary'" @mouseout="c1=''" :color="c1" @click.stop="addChild">
           <i class="el-icon-plus"/>
         </v-btn>
       </v-list-tile-action>
@@ -74,7 +74,7 @@
         c3: '',
         isSelected: false,
         open:false,
-        beginEdit:false,
+        beginEdit:false
       }
     },
     watch:{
@@ -133,38 +133,32 @@
         });
       },
       addChild: function () {
-        this.$http.get(this.url,{params: {pid:-1}}).then(resp => {
-          let child = {
-            id: resp.data[0].id+1,
-            name: '新的节点',
-            parentId: this.model.id,
-            isParent: false,
-            sort:this.model.children? this.model.children.length + 1:1
-          };
-          if (this.isSelected) {
-            if (!this.model.isParent) {
-              Vue.set(this.model, 'children', [child]);
-              this.model.isParent = true;
+        let child = {
+          id: 0,
+          name: '新的节点',
+          parentId: this.model.id,
+          isParent: false,
+          sort:this.model.children? this.model.children.length + 1:1
+        }
+        if (!this.model.isParent) {
+          Vue.set(this.model, 'children', [child]);
+          this.model.isParent = true;
+          this.open = true;
+          this.handleAdd(child);
+        } else {
+          if (!this.isFolder) {
+            this.$http.get(this.url, {params: {pid: this.model.id}}).then(resp => {
+              Vue.set(this.model, 'children', resp.data);
+              this.model.children.push(child);
               this.open = true;
               this.handleAdd(child);
-            } else {
-              if (!this.isFolder) {
-                this.$http.get(this.url, {params: {pid: this.model.id}}).then(resp => {
-                  Vue.set(this.model, 'children', resp.data);
-                  this.model.children.push(child);
-                  this.open = true;
-                  this.handleAdd(child);
-                });
-              } else {
-                this.model.children.push(child);
-                this.open = true;
-                this.handleAdd(child);
-              }
-            }
-          }else {
-            this.$message.error("选中后再操作！");
+            });
+          } else {
+            this.model.children.push(child);
+            this.open = true;
+            this.handleAdd(child);
           }
-        });
+        }
       },
       deleteChild: function () {
         this.$message.confirm('此操作将永久删除数据，是否继续?', '提示', {
@@ -173,17 +167,17 @@
           type: 'warning'
         }).then(() => {
           this.handleDelete(this.model.id);
-        }).catch(() => {
+        }).catch(()=>{
           this.$message.info('已取消删除');
         })
+
       },
       editChild() {
         this.beginEdit = true;
         this.$nextTick(() => this.$refs[this.model.id].focus());
       },
       afterEdit() {
-        //原来是错的，多了个model
-        if (this.beginEdit) {
+        if (this.model.beginEdit) {
           this.beginEdit = false;
           this.handleEdit(this.model.id, this.model.name);
         }

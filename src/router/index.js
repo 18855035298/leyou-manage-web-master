@@ -16,7 +16,7 @@ function route (path, file, name, children) {
 
 export default new Router({
   routes: [
-    // route("/login",'/Login',"Login"),
+     route("/login",'/Login',"Login"),
     {
       path:"/",
       component: () => import('../pages/Layout'),  //异步加载

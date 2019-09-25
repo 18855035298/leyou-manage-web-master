@@ -34,6 +34,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
+    disableHostCheck: true, //  新增该配置项
     overlay: config.dev.errorOverlay
       ? { warnings: false, errors: true }
       : false,
