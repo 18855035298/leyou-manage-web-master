@@ -39,6 +39,7 @@
         }
       },
       handleEdit(id,name) {
+        console.log(name)
         // const node={
         //   id:id,
         //   name:name

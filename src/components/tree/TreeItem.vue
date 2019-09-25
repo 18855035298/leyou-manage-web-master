@@ -174,6 +174,7 @@
       },
       editChild() {
         this.beginEdit = true;
+        
         this.$nextTick(() => this.$refs[this.model.id].focus());
       },
       afterEdit() {

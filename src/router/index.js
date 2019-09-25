@@ -22,10 +22,9 @@ export default new Router({
       component: () => import('../pages/Layout'),  //异步加载
       redirect:"/index/dashboard",
       children:[
-        route("/login","/Login","Login"),
         route("/index/dashboard","/Dashboard","Dashboard"),
         route("/item/category",'/item/Category',"Category"),
-        route("/item/myBrand",'/item/MyBrand',"MyBrand"),
+        route("/item/brand",'/item/Brand',"Brand"),
         route("/item/myGoods",'/item/MyGoods','MyGoods'),
         route("/item/specification",'/item/Specification',"Specification"),
         route("/user/statistics",'/item/Statistics',"Statistics"),

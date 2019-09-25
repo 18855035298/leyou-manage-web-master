@@ -11,7 +11,7 @@ var menus = [
     path:"/item",
     items: [
       { title: "分类管理", path: "/category" },
-      { title: "品牌管理",path: "/myBrand"},
+      { title: "品牌管理",path: "/Brand"},
       { title: "商品列表", path: "/myGoods" },
       { title: "规格参数", path: "/specification" }
     ]
