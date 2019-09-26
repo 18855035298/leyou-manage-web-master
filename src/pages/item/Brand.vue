@@ -45,15 +45,17 @@
     <v-card>
         <!--对话框的标题-->
         <v-toolbar dense dark color="primary">
-            <span class="headline">新增品牌</span>
+            <span class="headline">
+                {{isEdit?'修改':'新增'}}品牌
+            </span>
             <v-spacer/>
             <v-btn icon @click="closeWindow" >
                 <v-icon>close</v-icon>
             </v-btn>
         </v-toolbar>
         <!--对话框的内容，表单-->
-        <v-card-text class="px-5" style="height: 600px;">
-           <BrandForm></BrandForm>
+        <v-card-text class="px-5" style="height: 500px;">
+           <brand-form  @reload="reload" :isEdit="isEdit" @close="closeWindow" :oldBrand="oldBrand"></brand-form>
         </v-card-text>
     </v-card>
 </v-dialog>
@@ -80,6 +82,8 @@ export default {
             loading:false,
             search:'',
             show:false,
+            isEdit:false, //是否编辑
+            oldBrand:{}, //回显要修改的数据
 
         }
     },
@@ -101,12 +105,21 @@ export default {
         this.getData();
     },
     methods:{
+         reload(){
+          //关闭对话框
+          this.show=false;
+          //刷新页面
+          this.getData();
+        },
         add(){
+            this.isEdit=false;
             this.show=true;
+            this.oldBrand = null;
         },
         closeWindow(){
             // 关闭窗口
             this.show = false;
+            this.getData()
         },
         getData(){
             this.loading=true;
@@ -125,13 +138,27 @@ export default {
             })
         },
         editItem(item){
-            console.log(item)
+            this.$http.get("/item/brand/bid/"+item.id).then(
+              ({data}) => {
+                this.isEdit=true;
+                //显示弹窗
+                this.show=true;
+                //获取要编辑的brand
+                this.oldBrand=item;
+                this.oldBrand.categories = data;
+              }
+            ).catch();
         },
          delItem(item){
-             this.$http.delete("/item/brand",JSON.stringify(item)).then(resp=>{
-                this.$message.info("删除成功！");
-               this.getData();
-            })
+             var id= item.id
+             this.$message.confirm("确认删除该品牌").then(()=>{
+                this.$http.delete("/item/brand/"+id).then(resp=>{
+                this.$message.success("删除成功！");
+                this.getData();
+            }).catch(() => {
+                this.$message.error("删除失败！");
+            });
+             })
         },
     },
     components:{
