@@ -101,7 +101,14 @@ http {
 			proxy_connect_timeout 1000;
 			proxy_read_timeout 1000;
         }
-
+        # 上传路径的映射
+		location /api/upload {	
+			proxy_pass http://127.0.0.1:8082;
+			proxy_connect_timeout 600;
+			proxy_read_timeout 600;
+			
+			rewrite "^/api/(.*)$" /$1 break; 
+        }
        
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
